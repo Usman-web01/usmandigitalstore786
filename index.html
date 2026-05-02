@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graphic Designer — Hafiz Usman Sharazi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #050505; color: #e5e5e5; overflow-x: hidden; }
+
+        /* Animations */
+        @keyframes slideInUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.08; transform: scale(1); }
+            50% { opacity: 0.14; transform: scale(1.1); }
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        @keyframes rotate-slow {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes ticker-slide {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-33.333%); }
+        }
+        @keyframes fade-in-scale {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes draw-line {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes dot-pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.8); opacity: 0.3; }
+        }
+
+        .animate-in { animation: slideInUp 0.6s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.15s; }
+        .delay-2 { animation-delay: 0.3s; }
+        .delay-3 { animation-delay: 0.45s; }
+        .delay-4 { animation-delay: 0.6s; }
+        .delay-5 { animation-delay: 0.75s; }
+        .delay-6 { animation-delay: 0.9s; }
+        .float { animation: float 5s ease-in-out infinite; }
+
+        /* Glow blob */
+        .glow-blob {
+            position: absolute;
+            width: 600px; height: 600px;
+            background: #00ffc4;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.08;
+            animation: pulse-slow 6s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        /* Grid background */
+        .grid-bg {
+            background-image: linear-gradient(to right, #80808005 1px, transparent 1px), linear-gradient(to bottom, #80808005 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* Navbar glass */
+        .nav-glass {
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Card hover */
+        .service-card {
+            position: relative;
+            background: #0a0a0a;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #00ffc4, transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .service-card:hover {
+            border-color: rgba(0,255,196,0.15);
+            box-shadow: 0 0 30px rgba(0,255,196,0.08);
+            transform: translateY(-4px);
+        }
+        .service-card:hover::before { opacity: 1; }
+        .service-card:hover .card-icon {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(0,255,196,0.3);
+        }
+
+        .card-icon {
+            width: 48px; height: 48px;
+            background: rgba(0,255,196,0.1);
+            border: 1px solid rgba(0,255,196,0.2);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.4s;
+        }
+
+        /* Button shine */
+        .btn-primary {
+            position: relative;
+            overflow: hidden;
+            background: #00ffc4;
+            color: #000;
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px rgba(0,255,196,0.3);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 40px rgba(0,255,196,0.5);
+            transform: translateY(-1px);
+        }
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transform: translateX(-100%);
+        }
+        .btn-primary:hover::after {
+            animation: shimmer 0.7s forwards;
+        }
+
+        .btn-secondary {
+            padding: 14px 32px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.1);
+            background: transparent;
+            color: #e5e5e5;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover {
+            border-color: rgba(0,255,196,0.3);
+            background: rgba(0,255,196,0.05);
+            box-shadow: 0 0 15px rgba(0,255,196,0.1);
+        }
+
+        /* Contact card */
+        .contact-card {
+            background: #0a0a0a;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            padding: 28px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        .contact-card:hover {
+            border-color: rgba(0,255,196,0.2);
+            background: rgba(0,255,196,0.03);
+            transform: translateX(4px);
+        }
+
+        /* Ticker mask */
+        .ticker-mask {
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(25px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Status dot */
+        .status-dot {
+            width: 8px; height: 8px;
+            background: #00ffc4;
+            border-radius: 50%;
+            position: relative;
+        }
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            background: #00ffc4;
+            animation: dot-pulse 2s ease-in-out infinite;
+        }
+
+        /* Decorative rotating element */
+        .rotate-deco {
+            animation: rotate-slow 20s linear infinite;
+        }
+
+        /* Section divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.08), transparent);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #1a1d21;
+            border: 1px solid rgba(0,255,196,0.2);
+            color: #e5e5e5;
+            padding: 14px 28px;
+            border-radius: 12px;
+            font-size: 14px;
+            z-index: 9999;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s;
+            opacity: 0;
+            box-shadow: 0 0 30px rgba(0,255,196,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #1a1d21; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00ffc4; }
+
+        /* Portfolio grid images */
+        .portfolio-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+        }
+        .portfolio-item img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        .portfolio-item:hover img {
+            transform: scale(1.08);
+        }
+        .portfolio-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%);
+            display: flex;
+            align-items: flex-end;
+            padding: 24px;
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <!-- Glow Blobs -->
+    <div class="glow-blob" style="top: -200px; left: -200px;"></div>
+    <div class="glow-blob" style="top: 50%; right: -300px; animation-delay: 3s;"></div>
+    <div class="glow-blob" style="bottom: -200px; left: 30%; animation-delay: 1.5s;"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-glass sticky top-0 z-50 border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-9 h-9 rounded-lg bg-[#00ffc4]/10 border border-[#00ffc4]/20 flex items-center justify-center group-hover:shadow-[0_0_15px_rgba(0,255,196,0.3)] transition-all">
+                    <i data-lucide="pen-tool" class="w-4 h-4 text-[#00ffc4]"></i>
+                </div>
+                <span class="text-lg font-semibold tracking-tight">Designer<span class="text-[#00ffc4]">.</span></span>
+            </a>
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#services" class="text-sm text-neutral-400 hover:text-[#00ffc4] transition-colors">Services</a>
+                <a href="#portfolio" class="text-sm text-neutral-400 hover:text-[#00ffc4] transition-colors">Portfolio</a>
+                <a href="#contact" class="text-sm text-neutral-400 hover:text-[#00ffc4] transition-colors">Contact</a>
+            </div>
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#00ffc4]/10 border border-[#00ffc4]/20">
+                    <div class="status-dot"></div>
+                    <span class="text-xs font-medium text-[#00ffc4]">Available</span>
+                </div>
+                <a href="#contact" class="hidden sm:inline-flex btn-primary text-sm !py-2.5 !px-5">Hire Me</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-16 md:pt-24 pb-24 md:pb-32">
+        <div class="max-w-5xl mx-auto px-6 text-center">
+            <!-- Tag -->
+            <div class="animate-in inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.06] mb-8">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-[#00ffc4]"></i>
+                <span class="text-xs font-medium text-neutral-400 tracking-wide uppercase">Creative Graphic Designer</span>
+            </div>
+
+            <!-- Main Heading -->
+            <h1 class="animate-in delay-1 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.1] mb-6">
+                Designs That<br>
+                <span class="font-['Playfair_Display'] italic text-[#00ffc4]">Speak</span> Louder
+            </h1>
+
+            <!-- Description -->
+            <p class="animate-in delay-2 text-lg md:text-xl text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-10">
+                I am a professional graphic designer providing creative, modern, and high-quality design services. I specialize in logo design, social media posts, business cards, flyers, and complete branding solutions.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="animate-in delay-3 flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#contact" class="btn-primary text-base flex items-center gap-2">
+                    <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    Get in Touch
+                </a>
+                <a href="#services" class="btn-secondary text-base flex items-center gap-2">
+                    <i data-lucide="layers" class="w-5 h-5"></i>
+                    View Services
+                </a>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="animate-in delay-4 flex items-center justify-center gap-8 md:gap-16 mt-16 pt-8 border-t border-white/5">
+                <div class="text-center">
+                    <div class="text-2xl md:text-3xl font-semibold text-white" id="stat-projects">0+</div>
+                    <div class="text-xs text-neutral-500 mt-1 uppercase tracking-wider">Projects</div>
+                </div>
+                <div class="w-px h-10 bg-white/5"></div>
+                <div class="text-center">
+                    <div class="text-2xl md:text-3xl font-semibold text-white" id="stat-clients">0+</div>
+                    <div class="text-xs text-neutral-500 mt-1 uppercase tracking-wider">Happy Clients</div>
+                </div>
+                <div class="w-px h-10 bg-white/5"></div>
+                <div class="text-center">
+                    <div class="text-2xl md:text-3xl font-semibold text-white" id="stat-years">0+</div>
+                    <div class="text-xs text-neutral-500 mt-1 uppercase tracking-wider">Years Exp.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="absolute top-32 left-8 w-16 h-16 border border-white/5 rounded-full rotate-deco hidden lg:block"></div>
+        <div class="absolute bottom-20 right-12 w-24 h-24 border border-[#00ffc4]/5 rounded-lg rotate-deco hidden lg:block" style="animation-direction: reverse;"></div>
+    </section>
+
+    <!-- Divider -->
+    <div class="section-divider max-w-5xl mx-auto"></div>
+
+    <!-- Ticker / Skills Bar -->
+    <section class="py-12 overflow-hidden ticker-mask">
+        <div class="flex whitespace-nowrap" style="animation: ticker-slide 25s linear infinite;">
+            <div class="flex items-center gap-8 px-4">
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Logo Design</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Social Media</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Business Cards</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Flyers & Posters</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Branding</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Adobe Photoshop</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Illustrator</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>CorelDraw</span>
+            </div>
+            <div class="flex items-center gap-8 px-4">
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Logo Design</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Social Media</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Business Cards</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Flyers & Posters</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Branding</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Adobe Photoshop</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Illustrator</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>CorelDraw</span>
+            </div>
+            <div class="flex items-center gap-8 px-4">
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Logo Design</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Social Media</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Business Cards</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Flyers & Posters</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Branding</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Adobe Photoshop</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>Illustrator</span>
+                <span class="text-neutral-600 text-sm font-medium uppercase tracking-widest flex items-center gap-3"><span class="w-1.5 h-1.5 bg-[#00ffc4]/30 rounded-full"></span>CorelDraw</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 md:py-32 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <!-- Section Header -->
+            <div class="reveal text-center mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] mb-5">
+                    <i data-lucide="briefcase" class="w-3.5 h-3.5 text-[#00ffc4]"></i>
+                    <span class="text-[11px] font-medium text-neutral-400 tracking-wider uppercase">What I Offer</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-semibold tracking-tight mb-4">
+                    My <span class="font-['Playfair_Display'] italic text-[#00ffc4]">Services</span>
+                </h2>
+                <p class="text-neutral-400 text-lg max-w-xl mx-auto">
+                    Unique and eye-catching designs that help your business stand out from the competition.
+                </p>
+            </div>
+
+            <!-- Services Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Logo Design -->
+                <div class="service-card reveal">
+                    <div class="card-icon mb-5">
+                        <i data-lucide="hexagon" class="w-5 h-5 text-[#00ffc4]"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-3 text-white">Logo Design</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed mb-5">
+                        Custom, memorable logos that capture your brand's essence and make a lasting first impression.
+                    </p>
+                    <div class="flex items-center gap-2 text-[#00ffc4] text-sm font-medium group cursor-pointer">
+                        <span>Learn more</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Social Media Design -->
+                <div class="service-card reveal" style="transition-delay: 0.1s;">
+                    <div class="card-icon mb-5">
+                        <i data-lucide="smartphone" class="w-5 h-5 text-[#00ffc4]"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-3 text-white">Social Media Design</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed mb-5">
+                        Scroll-stopping social media posts, stories, and banners that boost engagement and followers.
+                    </p>
+                    <div class="flex items-center gap-2 text-[#00ffc4] text-sm font-medium group cursor-pointer">
+                        <span>Learn more</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Business Cards -->
+                <div class="service-card reveal" style="transition-delay: 0.2s;">
+                    <div class="card-icon mb-5">
+                        <i data-lucide="credit-card" class="w-5 h-5 text-[#00ffc4]"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-3 text-white">Business Cards</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed mb-5">
+                        Professional business card designs that leave a strong impression at every networking opportunity.
+                    </p>
+                    <div class="flex items-center gap-2 text-[#00ffc4] text-sm font-medium group cursor-pointer">
+                        <span>Learn more</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Flyers & Posters -->
+                <div class="service-card reveal" style="transition-delay: 0.3s;">
+                    <div class="card-icon mb-5">
+                        <i data-lucide="image" class="w-5 h-5 text-[#00ffc4]"></i>
+                    </div>
+                    <h3 class="text-xl font-medium mb-3 text-white">Flyers & Posters</h3>
+                    <p class="text-sm text-neutral-400 leading-relaxed mb-5">
+                        High-impact flyers and posters designed to grab attention and effectively communicate your message.
+                    </p>
+                    <div class="flex items-center gap-2 text-[#00ffc4] text-sm font-medium group cursor-pointer">
+                        <span>Learn more</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Branding Design -->
+                <div class="service-card reveal sm:col-span-2 lg:col-span-2" style="transition-delay: 0.4s;">
+                    <div class="flex flex-col md:flex-row md:items-start gap-6">
+                        <div>
+                            <div class="card-icon mb-5">
+                                <i data-lucide="crown" class="w-5 h-5 text-[#00ffc4]"></i>
+                            </div>
+                            <h3 class="text-xl font-medium mb-3 text-white">Complete Branding Solutions</h3>
+                            <p class="text-sm text-neutral-400 leading-relaxed mb-5 max-w-md">
+                                Full brand identity packages including logo, color palette, typography, brand guidelines, stationery, and all marketing collateral — everything you need to launch with impact.
+                            </p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 text-xs rounded-full bg-white/[0.03] border border-white/[0.06] text-neutral-400">Brand Guide</span>
+                                <span class="px-3 py-1 text-xs rounded-full bg-white/[0.03] border border-white/[0.06] text-neutral-400">Stationery</span>
+                                <span class="px-3 py-1 text-xs rounded-full bg-white/[0.03] border border-white/[0.06] text-neutral-400">Collateral</span>
+                                <span class="px-3 py-1 text-xs rounded-full bg-white/[0.03] border border-white/[0.06] text-neutral-400">Identity</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 grid grid-cols-2 gap-3 min-w-0">
+                            <div class="aspect-square rounded-xl bg-gradient-to-br from-[#00ffc4]/10 to-transparent border border-[#00ffc4]/10 flex items-center justify-center">
+                                <i data-lucide="palette" class="w-8 h-8 text-[#00ffc4]/40"></i>
+                            </div>
+                            <div class="aspect-square rounded-xl bg-gradient-to-br from-[#047857]/10 to-transparent border border-[#047857]/10 flex items-center justify-center">
+                                <i data-lucide="type" class="w-8 h-8 text-[#047857]/40"></i>
+                            </div>
+                            <div class="aspect-square rounded-xl bg-gradient-to-br from-[#047857]/10 to-transparent border border-[#047857]/10 flex items-center justify-center">
+                                <i data-lucide="layout" class="w-8 h-8 text-[#047857]/40"></i>
+                            </div>
+                            <div class="aspect-square rounded-xl bg-gradient-to-br from-[#00ffc4]/10 to-transparent border border-[#00ffc4]/10 flex items-center justify-center">
+                                <i data-lucide="figma" class="w-8 h-8 text-[#00ffc4]/40"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="section-divider max-w-5xl mx-auto"></div>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-24 md:py-32 relative">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="reveal text-center mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] mb-5">
+                    <i data-lucide="folder-open" class="w-3.5 h-3.5 text-[#00ffc4]"></i>
+                    <span class="text-[11px] font-medium text-neutral-400 tracking-wider uppercase">Selected Work</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-semibold tracking-tight mb-4">
+                    Recent <span class="font-['Playfair_Display'] italic text-[#00ffc4]">Projects</span>
+                </h2>
+                <p class="text-neutral-400 text-lg max-w-xl mx-auto">
+                    A glimpse of my creative work across different design categories.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="portfolio-item reveal">
+                    <img src="https://picsum.photos/seed/logodesign01/600/450.jpg" alt="Logo Design" loading="lazy">
+                    <div class="portfolio-overlay">
+                        <div>
+                            <span class="text-xs text-[#00ffc4] font-medium uppercase tracking-wider">Logo Design</span>
+                            <p class="text-white font-medium mt-1">Modern Brand Identity</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item reveal" style="transition-delay: 0.1s;">
+                    <img src="https://picsum.photos/seed/socialmedia02/600/450.jpg" alt="Social Media" loading="lazy">
+                    <div class="portfolio-overlay">
+                        <div>
+                            <span class="text-xs text-[#00ffc4] font-medium uppercase tracking-wider">Social Media</span>
+                            <p class="text-white font-medium mt-1">Instagram Campaign</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item reveal" style="transition-delay: 0.2s;">
+                    <img src="https://picsum.photos/seed/businesscard03/600/450.jpg" alt="Business Card" loading="lazy">
+                    <div class="portfolio-overlay">
+                        <div>
+                            <span class="text-xs text-[#00ffc4] font-medium uppercase tracking-wider">Business Card</span>
+                            <p class="text-white font-medium mt-1">Premium Card Design</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item reveal" style="transition-delay: 0.3s;">
+                    <img src="https://picsum.photos/seed/flyerposter04/600/450.jpg" alt="Flyer Design" loading="lazy">
+                    <div class="portfolio-overlay">
+                        <div>
+                            <span class="text-xs text-[#00ffc4] font-medium uppercase tracking-wider">Flyer</span>
+                            <p class="text-white font-medium mt-1">Event Promotion</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="portfolio-item reveal sm:col-span-2" style="transition-delay: 0.4s;">
+                    <img src="https://picsum.photos/seed/brandingfull05/1200/450.jpg" alt="Branding" loading="lazy">
+                    <div class="portfolio-overlay">
+                        <div>
+                            <span class="text-xs text-[#00ffc4] font-medium uppercase tracking-wider">Branding</span>
+                            <p class="text-white font-medium mt-1">Complete Brand Identity Package</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="section-divider max-w-5xl mx-auto"></div>
+
+    <!-- Process Section -->
+    <section class="py-24 md:py-32 relative">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="reveal text-center mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] mb-5">
+                    <i data-lucide="workflow" class="w-3.5 h-3.5 text-[#00ffc4]"></i>
+                    <span class="text-[11px] font-medium text-neutral-400 tracking-wider uppercase">How I Work</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-semibold tracking-tight mb-4">
+                    My <span class="font-['Playfair_Display'] italic text-[#00ffc4]">Process</span>
+                </h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="reveal text-center relative">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-[#00ffc4]/10 border border-[#00ffc4]/20 flex items-center justify-center mb-4 text-[#00ffc4] font-semibold text-lg">01</div>
+                    <h4 class="font-medium text-white mb-2">Discovery</h4>
+                    <p class="text-sm text-neutral-500 leading-relaxed">Understanding your brand, goals, and vision through detailed discussion.</p>
+                    <div class="hidden md:block absolute top-7 left-[60%] w-[80%] h-px bg-gradient-to-r from-[#00ffc4]/20 to-transparent"></div>
+                </div>
+                <div class="reveal text-center relative" style="transition-delay: 0.15s;">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-[#00ffc4]/10 border border-[#00ffc4]/20 flex items-center justify-center mb-4 text-[#00ffc4] font-semibold text-lg">02</div>
+                    <h4 class="font-medium text-white mb-2">Concept</h4>
+                    <p class="text-sm text-neutral-500 leading-relaxed">Sketching ideas and creating initial design concepts for your review.</p>
+                    <div class="hidden md:block absolute top-7 left-[60%] w-[80%] h-px bg-gradient-to-r from-[#00ffc4]/20 to-transparent"></div>
+                </div>
+                <div class="reveal text-center relative" style="transition-delay: 0.3s;">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-[#00ffc4]/10 border border-[#00ffc4]/20 flex items-center justify-center mb-4 text-[#00ffc4] font-semibold text-lg">03</div>
+                    <h4 class="font-medium text-white mb-2">Refine</h4>
+                    <p class="text-sm text-neutral-500 leading-relaxed">Polishing the chosen concept with your feedback until it's perfect.</p>
+                    <div class="hidden md:block absolute top-7 left-[60%] w-[80%] h-px bg-gradient-to-r from-[#00ffc4]/20 to-transparent"></div>
+                </div>
+                <div class="reveal text-center" style="transition-delay: 0.45s;">
+                    <div class="w-14 h-14 mx-auto rounded-2xl bg-[#00ffc4]/10 border border-[#00ffc4]/20 flex items-center justify-center mb-4 text-[#00ffc4] font-semibold text-lg">04</div>
+                    <h4 class="font-medium text-white mb-2">Deliver</h4>
+                    <p class="text-sm text-neutral-500 leading-relaxed">Final files delivered in all required formats, ready to use.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divider -->
+    <div class="section-divider max-w-5xl mx-auto"></div>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 md:py-32 relative">
+        <div class="max-w-5xl mx-auto px-6">
+            <div class="reveal text-center mb-16">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.06] mb-5">
+                    <i data-lucide="send" class="w-3.5 h-3.5 text-[#00ffc4]"></i>
+                    <span class="text-[11px] font-medium text-neutral-400 tracking-wider uppercase">Get in Touch</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-semibold tracking-tight mb-4">
+                    Let's <span class="font-['Playfair_Display'] italic text-[#00ffc4]">Work</span> Together
+                </h2>
+                <p class="text-neutral-400 text-lg max-w-xl mx-auto">
+                    Have a project in mind? I'd love to hear about it. Reach out and let's create something amazing.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Contact Info -->
+                <div class="space-y-5 reveal">
+                    <a href="tel:03308270097" class="contact-card">
+                        <div class="w-12 h-12 rounded-xl bg-[#00ffc4]/10 border border-[#00ffc4]/20 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="phone" class="w-5 h-5 text-[#00ffc4]"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-neutral-500 uppercase tracking-wider mb-1">Phone</div>
+                            <div class="text-white font-medium">0330 8270097</div>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-neutral-600 ml-auto flex-shrink-0"></i>
+                    </a>
+
+                    <a href="mailto:hafizusmansharazi@gmail.com" class="contact-card">
+                        <div class="w-12 h-12 rounded-xl bg-[#00ffc4]/10 border border-[#00ffc4]/20 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="mail" class="w-5 h-5 text-[#00ffc4]"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="text-xs text-neutral-500 uppercase tracking-wider mb-1">Email</div>
+                            <div class="text-white font-medium truncate">hafizusmansharazi@gmail.com</div>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-neutral-600 ml-auto flex-shrink-0"></i>
+                    </a>
+
+                    <div class="contact-card">
+                        <div class="w-12 h-12 rounded-xl bg-[#00ffc4]/10 border border-[#00ffc4]/20 flex items-center justify-center flex-shrink-0">
+                            <i data-lucide="clock" class="w-5 h-5 text-[#00ffc4]"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-neutral-500 uppercase tracking-wider mb-1">Response Time</div>
+                            <div class="text-white font-medium">Within 24 Hours</div>
+                        </div>
+                    </div>
+
+                    <!-- WhatsApp CTA -->
+                    <a href="https://wa.me/923308270097" target="_blank" rel="noopener" class="block w-full mt-4 p-4 rounded-2xl bg-[#25D366]/10 border border-[#25D366]/20 text-center hover:bg-[#25D366]/15 hover:border-[#25D366]/30 transition-all group">
+                        <div class="flex items-center justify-center gap-3">
+                            <svg class="w-6 h-6 text-[#25D366]" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                            <span class="text-[#25D366] font-medium group-hover:underline">Chat on WhatsApp</span>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Contact Form -->
+                <form id="contactForm" class="reveal space-y-5" style="transition-delay: 0.15s;">
+                    <div>
+                        <label class="block text-xs text-neutral-500 uppercase tracking-wider mb-2">Your Name</label>
+                        <input type="text" id="formName" required placeholder="John Doe" class="w-full px-4 py-3.5 rounded-xl bg-[#0a0a0a] border border-white/[0.06] text-white placeholder-neutral-600 text-sm focus:outline-none focus:border-[#00ffc4]/30 focus:shadow-[0_0_15px_rgba(0,255,196,0.08)] transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-neutral-500 uppercase tracking-wider mb-2">Email Address</label>
+                        <input type="email" id="formEmail" required placeholder="john@example.com" class="w-full px-4 py-3.5 rounded-xl bg-[#0a0a0a] border border-white/[0.06] text-white placeholder-neutral-600 text-sm focus:outline-none focus:border-[#00ffc4]/30 focus:shadow-[0_0_15px_rgba(0,255,196,0.08)] transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-neutral-500 uppercase tracking-wider mb-2">Service Needed</label>
+                        <select id="formService" class="w-full px-4 py-3.5 rounded-xl bg-[#0a0a0a] border border-white/[0.06] text-neutral-400 text-sm focus:outline-none focus:border-[#00ffc4]/30 focus:shadow-[0_0_15px_rgba(0,255,196,0.08)] transition-all appearance-none cursor-pointer" style="background-image: url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23737373%22 stroke-width=%222%22><polyline points=%226 9 12 15 18 9%22/></svg>'); background-repeat: no-repeat; background-position: right 16px center;">
+                            <option value="">Select a service</option>
+                            <option value="logo">Logo Design</option>
+                            <option value="social">Social Media Design</option>
+                            <option value="card">Business Cards</option>
+                            <option value="flyer">Flyers & Posters</option>
+                            <option value="branding">Branding Design</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-neutral-500 uppercase tracking-wider mb-2">Project Details</label>
+                        <textarea id="formMessage" rows="4" required placeholder="Tell me about your project..." class="w-full px-4 py-3.5 rounded-xl bg-[#0a0a0a] border border-white/[0.06] text-white placeholder-neutral-600 text-sm focus:outline-none focus:border-[#00ffc4]/30 focus:shadow-[0_0_15px_rgba(0,255,196,0.08)] transition-all resize-none"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary w-full text-base flex items-center justify-center gap-2">
+                        <i data-lucide="send" class="w-5 h-5"></i>
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/5 py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-[#00ffc4]/10 border border-[#00ffc4]/20 flex items-center justify-center">
+                        <i data-lucide="pen-tool" class="w-3.5 h-3.5 text-[#00ffc4]"></i>
+                    </div>
+                    <span class="text-sm font-medium">Graphic Designer</span>
+                </div>
+                <p class="text-sm text-neutral-600">© 2025 Hafiz Usman Sharazi. All rights reserved.</p>
+                <div class="flex items-center gap-4">
+                    <a href="mailto:hafizusmansharazi@gmail.com" class="w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.06] flex items-center justify-center hover:border-[#00ffc4]/20 hover:bg-[#00ffc4]/5 transition-all">
+                        <i data-lucide="mail" class="w-4 h-4 text-neutral-500 hover:text-[#00ffc4]"></i>
+                    </a>
+                    <a href="https://wa.me/923308270097" target="_blank" rel="noopener" class="w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.06] flex items-center justify-center hover:border-[#00ffc4]/20 hover:bg-[#00ffc4]/5 transition-all">
+                        <i data-lucide="message-circle" class="w-4 h-4 text-neutral-500 hover:text-[#00ffc4]"></i>
+                    </a>
+                    <a href="tel:03308270097" class="w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.06] flex items-center justify-center hover:border-[#00ffc4]/20 hover:bg-[#00ffc4]/5 transition-all">
+                        <i data-lucide="phone" class="w-4 h-4 text-neutral-500 hover:text-[#00ffc4]"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i data-lucide="check-circle" class="w-5 h-5 text-[#00ffc4]"></i>
+        <span id="toastMsg">Message sent successfully!</span>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Counter Animation
+        function animateCounter(elementId, target, suffix = '+') {
+            const el = document.getElementById(elementId);
+            let current = 0;
+            const increment = Math.ceil(target / 40);
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                el.textContent = current + suffix;
+            }, 40);
+        }
+
+        // Trigger counters when visible
+        let countersStarted = false;
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !countersStarted) {
+                    countersStarted = true;
+                    animateCounter('stat-projects', 150);
+                    animateCounter('stat-clients', 80);
+                    animateCounter('stat-years', 3);
+                }
+            });
+        }, { threshold: 0.5 });
+        statsObserver.observe(document.getElementById('stat-projects'));
+
+        // Scroll Reveal
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // Toast function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3500);
+        }
+
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('formName').value.trim();
+            const email = document.getElementById('formEmail').value.trim();
+            const service = document.getElementById('formService').value;
+            const message = document.getElementById('formMessage').value.trim();
+
+            if (!name || !email || !message) {
+                showToast('Please fill in all required fields.');
+                return;
+            }
+
+            // Construct mailto link
+            const subject = encodeURIComponent(`Design Inquiry: ${service || 'General'} — from ${name}`);
+            const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nService: ${service || 'Not specified'}\n\nMessage:\n${message}`);
+            window.location.href = `mailto:hafizusmansharazi@gmail.com?subject=${subject}&body=${body}`;
+
+            showToast('Opening your email client...');
+            this.reset();
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.style.borderBottomColor = 'rgba(255,255,255,0.08)';
+            } else {
+                nav.style.borderBottomColor = 'rgba(255,255,255,0.03)';
+            }
+        });
+    </script>
+</body>
+</html>
